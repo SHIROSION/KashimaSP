@@ -18,8 +18,6 @@ class SQLConnect:
     this class main to connect mysql to insert stock data and create table.
 
     Attributes:
-        self.connect: this attributes is the information to connect mysql.
-        table_tuple: this attributes is the databases tables name to save, which can check whether the table is created.
     """
 
     def __init__(self):
@@ -58,10 +56,10 @@ class SQLConnect:
              :param data: insert stock price data.
              :param count: get file line to check up, which check to see if updates are needed.
 
-        :return:
-
         Raises:
                pymysql.err.ProgrammingError: if anything happens in programming at commit, databases will rollback.
+
+        :return:
         """
         table_count = 0
         self.show_table()
@@ -88,28 +86,59 @@ class SQLConnect:
             except pymysql.err.ProgrammingError:
                 self.connect.rollback()
                 self.logger.error("create stock data table Error")
+            except pymysql.err.IntegrityError:
+                self.connect.rollback()
+                self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+
             try:
                 cursor.executemany(sql, data)
                 self.logger.info("insert stock data successful")
             except pymysql.err.ProgrammingError:
                 self.connect.rollback()
                 self.logger.error("insert stock data Error")
+            except pymysql.err.IntegrityError:
+                self.connect.rollback()
+                self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+
         else:
             # get table line to check to see if updates are needed.
             # if file line same as table line will pass update data.
-            # if file line not same as table line will update data.
+            # if file line different from table line will update data.
             cursor.execute("SELECT count(*) FROM %s" % table_name)
 
             for (x,) in cursor.fetchall():
                 table_count = int(x)
 
             if table_count != count and table_count != 0:
-                try:
-                    cursor.execute(sql, data[(count - table_count - 1):-1])
-                    self.logger.info("insert stock data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert stock data Error")
+                check_data = []
+                check_database_data = []
+                missing_index_list = []
+                insert_missing_data = []
+                missing_index = 0
+
+                # get file data primary key
+                for x in data:
+                    check_data.append(int(x[0]))
+
+                cursor.execute("SELECT data_index FROM %s" % table_name)
+
+                # get databases data primary key
+                for (x,) in cursor.fetchall():
+                    check_database_data.append(int(x))
+
+                # check for missing data in the database and sign index
+                for x in check_data:
+                    if x not in check_database_data:
+                        missing_index_list.append(missing_index)
+                        missing_index += 1
+                        continue
+                    else:
+                        missing_index += 1
+                        continue
+
+                # save missing data
+                for x in missing_index_list:
+                    insert_missing_data.append(data[int(x)])
 
             elif table_count == 0:
                 try:
@@ -118,6 +147,9 @@ class SQLConnect:
                 except pymysql.err.ProgrammingError:
                     self.connect.rollback()
                     self.logger.error("insert stock financial statements data Error")
+                except pymysql.err.IntegrityError:
+                    self.connect.rollback()
+                    self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
 
             else:
                 return
@@ -134,6 +166,7 @@ class SQLConnect:
 
         Raises:
                pymysql.err.ProgrammingError: if anything happens in programming at commit, databases will rollback.
+
         :return:
         """
         table_count = 0
@@ -157,6 +190,9 @@ class SQLConnect:
             except pymysql.err.ProgrammingError:
                 self.connect.rollback()
                 self.logger.error("create table stock_information Error")
+            except pymysql.err.IntegrityError:
+                self.connect.rollback()
+                self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
 
             try:
                 cursor.executemany(sql, information)
@@ -164,23 +200,59 @@ class SQLConnect:
             except pymysql.err.ProgrammingError:
                 self.connect.rollback()
                 self.logger.error("insert stock information Error")
+            except pymysql.err.IntegrityError:
+                self.connect.rollback()
+                self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
 
         else:
             # get table line to check to see if updates are needed.
             # if file line same as table line will pass update data.
-            # if file line not same as table line will update data.
+            # if file line different from table line will update data.
             cursor.execute("SELECT count(*) FROM stock_information")
 
             for (x,) in cursor.fetchall():
                 table_count = int(x)
 
             if table_count != count and table_count != 0:
+                check_data = []
+                check_database_data = []
+                missing_index_list = []
+                insert_missing_data = []
+                missing_index = 0
+
+                # get file data primary key
+                for x in information:
+                    check_data.append(int(x[0]))
+
+                cursor.execute("SELECT data_index FROM stock_information")
+
+                # get databases data primary key
+                for (x,) in cursor.fetchall():
+                    check_database_data.append(int(x))
+
+                # check for missing data in the database and sign index
+                for x in check_data:
+                    if x not in check_database_data:
+                        missing_index_list.append(missing_index)
+                        missing_index += 1
+                        continue
+                    else:
+                        missing_index += 1
+                        continue
+
+                # save missing data
+                for x in missing_index_list:
+                    insert_missing_data.append(information[int(x)])
+
                 try:
-                    cursor.executemany(sql, information[(count - table_count - 1):-1])
+                    cursor.executemany(sql, insert_missing_data)
                     self.logger.info("insert stock data successful")
                 except pymysql.err.ProgrammingError:
                     self.connect.rollback()
                     self.logger.error("insert stock information Error")
+                except pymysql.err.IntegrityError:
+                    self.connect.rollback()
+                    self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
 
             elif table_count == 0:
 
@@ -190,6 +262,9 @@ class SQLConnect:
                 except pymysql.err.ProgrammingError:
                     self.connect.rollback()
                     self.logger.error("insert stock financial statements data Error")
+                except pymysql.err.IntegrityError:
+                    self.connect.rollback()
+                    self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
 
             else:
                 return
@@ -278,23 +353,52 @@ class SQLConnect:
             except pymysql.err.ProgrammingError:
                 self.connect.rollback()
                 self.logger.error("insert stock financial statements data Error")
+            except pymysql.err.IntegrityError:
+                self.connect.rollback()
+                self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+
         else:
             # get table line to check to see if updates are needed.
             # if file line same as table line will pass update data.
-            # if file line not same as table line will update data.
-            check_data = ()
-            check_database_data = ()
+            # if file line different from table line will update missing data.
             cursor.execute("SELECT count(*) FROM %s" % financial_statements_table)
 
             for (x,) in cursor.fetchall():
                 table_count = int(x)
 
             if table_count != count and table_count != 0:
+                check_data = []
+                check_database_data = []
+                missing_index_list = []
+                insert_missing_data = []
+                missing_index = 0
 
+                # get file data primary key
                 for x in data:
-                    print(x)
+                    check_data.append(int(x[0]))
+
+                cursor.execute("SELECT data_index FROM %s" % financial_statements_table)
+
+                # get databases data primary key
+                for (x,) in cursor.fetchall():
+                    check_database_data.append(int(x))
+
+                # check for missing data in the database and sign index
+                for x in check_data:
+                    if x not in check_database_data:
+                        missing_index_list.append(missing_index)
+                        missing_index += 1
+                        continue
+                    else:
+                        missing_index += 1
+                        continue
+
+                # save missing data
+                for x in missing_index_list:
+                    insert_missing_data.append(data[int(x)])
+
                 try:
-                    cursor.executemany(sql, data[int(table_count - 1):-1])
+                    cursor.executemany(sql, insert_missing_data)
                     self.logger.info("insert stock financial statements data successful")
                 except pymysql.err.ProgrammingError:
                     self.connect.rollback()
@@ -310,6 +414,9 @@ class SQLConnect:
                 except pymysql.err.ProgrammingError:
                     self.connect.rollback()
                     self.logger.error("insert stock financial statements data Error")
+                except pymysql.err.IntegrityError:
+                    self.connect.rollback()
+                    self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
 
             else:
                 return

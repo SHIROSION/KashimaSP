@@ -1,4 +1,14 @@
-import insert_information
+#!/usr/bin/env python
+# coding=utf-8
+
+"""
+@module  : SQLConnect.py
+@author  : Rinne
+@contact : yejunbin123@qq.com
+@time    : 2019 / 01 / 22
+"""
+
+from src import insert_information
 import time
 import datetime
 import logging
