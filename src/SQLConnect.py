@@ -1018,7 +1018,6 @@ class SQLConnect:
             except Exception as ex:
                 self.logger.error(ex)
 
-
         else:
             # get table line to check to see if updates are needed.
             # if file line same as table line will pass update data.

@@ -8,6 +8,8 @@
 @time    : 2019 / 01 / 22
 """
 
+import csv
+import datetime
 import logging
 import time
 
@@ -49,6 +51,7 @@ class InsertInformation:
             self.logger.error("open stock file Error")
 
         self.use_sql = SQLConnect.SQLConnect()
+        self.years = 2000
 
     def insert(self):
         """ save stock data and read data to insert data.
@@ -71,6 +74,27 @@ class InsertInformation:
         for _ in enumerate(open(self.stock_information, 'r', encoding="UTF-8")):
             st_info_count += 1
 
+        while self.years <= datetime.datetime.now().year:
+            forecast_data_list = []
+            fc_forecast_file_path = "D://python project/teststock/data/%s1231_fc.csv" % self.years
+            fc = self.pro.query('forecast', period='%s1231' % self.years)
+            fc.to_csv(fc_forecast_file_path)
+            fc_count = 0
+            reader = csv.reader(open(fc_forecast_file_path, "r", encoding="UTF-8"))
+
+            # calculate forecast data file rows.
+            for _ in enumerate(open(fc_forecast_file_path, 'r', encoding="UTF-8")):
+                fc_count += 1
+
+            for row in reader:
+                if row[0] == "":
+                    continue
+                else:
+                    forecast_data_list.append(tuple(row))
+
+            self.use_sql.insert_forecast_data("%s1231_fc" % self.years, forecast_data_list, fc_count - 1)
+            self.years += 1
+
         # read stock information data.
         # extract the stock code for each line read.
         # use stock code to request api to get data and save.
@@ -82,7 +106,7 @@ class InsertInformation:
             financial_statements_information_list = []
             debt_data_list = []
             cashflow_data_list = []
-            forecast_data_list = []
+            # forecast_data_list = []
             dividend_data_list = []
             express_data_list = []
             fina_indicator_data_list = []
@@ -113,13 +137,10 @@ class InsertInformation:
                     ts_code += x
 
                 # request api to get data.
-                df = self.pro.query('daily', ts_code="%s" % get_stock_information[0], start_date='', end_date='')
-                fs = self.pro.query('income', ts_code="%s" % get_stock_information[0], start_date='', end_date='')
-                dbf = self.pro.query('balancesheet', ts_code="%s" % get_stock_information[0], start_date='',
-                                     end_date='')
-                cf = self.pro.query('cashflow', ts_code="%s" % get_stock_information[0], start_date='', end_date='')
-                fc = self.pro.query('forecast', ts_code="%s" % get_stock_information[0], ann_date='', start_date='',
-                                    end_date='', period='20181231')
+                df = self.pro.query('daily', ts_code="%s" % get_stock_information[0])
+                fs = self.pro.query('income', ts_code="%s" % get_stock_information[0])
+                dbf = self.pro.query('balancesheet', ts_code="%s" % get_stock_information[0])
+                cf = self.pro.query('cashflow', ts_code="%s" % get_stock_information[0])
                 ddf = self.pro.query('dividend', ts_code="%s" % get_stock_information[0], start_date='', end_date='')
                 ef = self.pro.query('express', ts_code="%s" % get_stock_information[0], start_date='', end_date='')
                 fif = self.pro.query('fina_indicator', ts_code="%s" % get_stock_information[0], start_date='',
@@ -129,7 +150,6 @@ class InsertInformation:
                 fs_data_file_path = "D://python project/teststock/data/%s_fs.csv" % ts_code
                 dbf_debt_file_path = "D://python project/teststock/data/%s_dbf.csv" % ts_code
                 cf_cashflow_file_path = "D://python project/teststock/data/%s_cf.csv" % ts_code
-                fc_forecast_file_path = "D://python project/teststock/data/%s_fc.csv" % ts_code
                 ddf_dividend_file_path = "D://python project/teststock/data/%s_ddf.csv" % ts_code
                 ef_express_file_path = "D://python project/teststock/data/%s_ef.csv" % ts_code
                 fif_fina_indicator_file_path = "D://python project/teststock/data/%s_fif.csv" % ts_code
@@ -139,7 +159,7 @@ class InsertInformation:
                 fs.to_csv(fs_data_file_path)
                 dbf.to_csv(dbf_debt_file_path)
                 cf.to_csv(cf_cashflow_file_path)
-                fc.to_csv(fc_forecast_file_path)
+                # fc.to_csv(fc_forecast_file_path)
                 ddf.to_csv(ddf_dividend_file_path)
                 ef.to_csv(ef_express_file_path)
                 fif.to_csv(fif_fina_indicator_file_path)
@@ -148,7 +168,7 @@ class InsertInformation:
                 open_fs_data_file = open(fs_data_file_path, "r", encoding="UTF-8")
                 open_dbf_debt_file = open(dbf_debt_file_path, "r", encoding="UTF-8")
                 open_cf_cashflow_file = open(cf_cashflow_file_path, "r", encoding="UTF-8")
-                open_fc_forecast_file = open(fc_forecast_file_path, "r", encoding="UTF-8")
+                # open_fc_forecast_file = open(fc_forecast_file_path, "r", encoding="UTF-8")
                 open_ddf_dividend_file = open(ddf_dividend_file_path, "r", encoding="UTF-8")
                 open_ef_express_file = open(ef_express_file_path, "r", encoding="UTF-8")
                 open_fif_fina_indicator_file = open(fif_fina_indicator_file_path, "r", encoding="UTF-8")
@@ -157,7 +177,7 @@ class InsertInformation:
                 fs_count = 0
                 dbf_count = 0
                 cf_count = 0
-                fc_count = 0
+                # fc_count = 0
                 ddf_count = 0
                 ef_count = 0
                 fif_count = 0
@@ -165,7 +185,7 @@ class InsertInformation:
                 fs_index_count = 1
                 dbf_index_count = 1
                 cf_index_count = 1
-                fc_index_count = 1
+                # fc_index_count = 1
                 ddf_index_count = 1
                 ef_index_count = 1
                 fif_index_count = 1
@@ -186,9 +206,9 @@ class InsertInformation:
                 for _ in enumerate(open(cf_cashflow_file_path, 'r', encoding="UTF-8")):
                     cf_count += 1
 
-                # calculate forecast data file rows.
-                for _ in enumerate(open(fc_forecast_file_path, 'r', encoding="UTF-8")):
-                    fc_count += 1
+                # # calculate forecast data file rows.
+                # for _ in enumerate(open(fc_forecast_file_path, 'r', encoding="UTF-8")):
+                #     fc_count += 1
 
                 # calculate dividend data file rows.
                 for _ in enumerate(open(ddf_dividend_file_path, 'r', encoding="UTF-8")):
@@ -272,7 +292,7 @@ class InsertInformation:
                     cf_data = cf.split(",")
 
                     if len(cf) <= 0:
-                        self.use_sql.insert_cashflow_data("%s_dbf" % ts_code, cashflow_data_list, cf_count - 1)
+                        self.use_sql.insert_cashflow_data("%s_cf" % ts_code, cashflow_data_list, cf_count - 1)
                         open_cf_cashflow_file.close()
                         break
 
@@ -288,25 +308,25 @@ class InsertInformation:
 
                 # read forecast data file and insert data to database.
                 # future processing
-                while True:
-                    break
-                    fc = open_fc_forecast_file.readline()
-                    fc_data = fc.split(",")
-
-                    if len(fc) <= 0:
-                        self.use_sql.insert_forecast_data("%s_fc" % ts_code, forecast_data_list, fc_count - 1)
-                        open_fc_forecast_file.close()
-                        break
-
-                    elif fc_data[0] == "":
-                        continue
-
-                    else:
-                        # reordering index
-                        fc_data[0] = fc_count - fc_index_count
-                        fc_index_count += 1
-                        fc_tuple = tuple(fc_data)
-                        forecast_data_list.append(fc_tuple)
+                # while True:
+                #     break
+                #     fc = open_fc_forecast_file.readline()
+                #     fc_data = fc.split(",")
+                #
+                #     if len(fc) <= 0:
+                #         self.use_sql.insert_forecast_data("%s_fc" % ts_code, forecast_data_list, fc_count - 1)
+                #         open_fc_forecast_file.close()
+                #         break
+                #
+                #     elif fc_data[0] == "":
+                #         continue
+                #
+                #     else:
+                #         # reordering index
+                #         fc_data[0] = fc_count - fc_index_count
+                #         fc_index_count += 1
+                #         fc_tuple = tuple(fc_data)
+                #         forecast_data_list.append(fc_tuple)
 
                 # read dividend data file and insert data to database.
                 while True:
