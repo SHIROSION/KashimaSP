@@ -83,23 +83,15 @@ class SQLConnect:
             # if the table does not exist, program will create table and insert stock price data.
             try:
                 cursor.execute(create_SQL)
-                self.logger.info("create stock data table successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("create stock data table Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
             try:
                 cursor.executemany(sql, data)
-                self.logger.info("insert stock data successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("insert stock data Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
         else:
             # get table line to check to see if updates are needed.
@@ -144,13 +136,10 @@ class SQLConnect:
             elif table_count == 0:
                 try:
                     cursor.executemany(sql, data)
-                    self.logger.info("insert stock financial statements data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert stock financial statements data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
+
 
             else:
                 return
@@ -187,23 +176,15 @@ class SQLConnect:
             # if the table does not exist, program will create table and insert stock basic information data.
             try:
                 cursor.execute(create_SQL)
-                self.logger.info("create table stock_information successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("create table stock_information Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
             try:
                 cursor.executemany(sql, information)
-                self.logger.info("insert stock information value (%s) successful" % information)
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("insert stock information Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
         else:
             # get table line to check to see if updates are needed.
@@ -246,26 +227,18 @@ class SQLConnect:
                     insert_missing_data.append(information[int(x)])
 
                 try:
-                    cursor.executemany(sql, insert_missing_data)
-                    self.logger.info("insert stock data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert stock information Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+                    cursor.executemany(sql, information)
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             elif table_count == 0:
 
                 try:
                     cursor.executemany(sql, information)
-                    self.logger.info("insert stock financial statements data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert stock financial statements data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+                except Exception as ex:
+                    self.logger.error(ex)
+
 
             else:
                 return
@@ -344,19 +317,14 @@ class SQLConnect:
             try:
                 cursor.execute(create_SQL)
                 self.logger.info("create stock financial statements table successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("create table financial_statements_table) Error")
+            except Exception as ex:
+                self.logger.error(ex)
 
             try:
                 cursor.executemany(sql, data)
-                self.logger.info("insert stock financial statements data successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("insert stock financial statements data Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
         else:
             # get table line to check to see if updates are needed.
@@ -400,24 +368,16 @@ class SQLConnect:
 
                 try:
                     cursor.executemany(sql, insert_missing_data)
-                    self.logger.info("insert stock financial statements data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert stock financial statements data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             elif table_count == 0:
                 try:
                     cursor.executemany(sql, data)
-                    self.logger.info("insert stock financial statements data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert stock financial statements data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert stock financial statements data Error")
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             else:
                 return
@@ -442,53 +402,30 @@ class SQLConnect:
 
         cursor = self.connect.cursor()
 
-        sql = "insert into {0} (data_index, ts_code ," \
-              "ann_date, f_ann_date, end_date, " \
-              "report_type , comp_type , total_share," \
-              "cap_rese , undistr_porfit , surplus_rese ," \
-              "special_rese , money_cap, trad_asset ," \
-              "notes_receiv, accounts_receiv , oth_receiv ," \
-              "prepayment, div_receiv , int_receiv ," \
-              "inventories , amor_exp , nca_within_1y ," \
-              "sett_rsrv , loanto_oth_bank_fi ,premium_receiv," \
-              "reinsur_receiv , reinsur_res_receiv ,pur_resale_fa ," \
-              "oth_cur_assets , total_cur_assets ,fa_avail_for_sale ," \
-              "htm_invest , lt_eqt_invest ,invest_real_estate ," \
-              "time_deposits , oth_assets ,lt_rec ," \
-              "fix_assets , cip,const_materials ," \
-              "fixed_assets_disp , produc_bio_assets ,oil_and_gas_assets ," \
-              "intan_assets , r_and_d ,goodwill ," \
-              "lt_amor_exp , defer_tax_assets ,decr_in_disbur ," \
-              "oth_nca , total_nca,cash_reser_cb," \
-              "depos_in_oth_bfi , prec_metals ,deriv_assets ," \
-              "rr_reins_une_prem , rr_reins_outstd_cla ,rr_reins_lins_liab ," \
-              "rr_reins_lthins_liab , refund_depos ,ph_pledge_loans ," \
-              "refund_cap_depos , indep_acct_assets ,client_depos ," \
-              "client_prov , transac_seat_fee ,invest_as_receiv ," \
-              "total_assets , lt_borr ,st_borr ," \
-              "cb_borr , depos_ib_deposits ,loan_oth_bank ," \
-              "trading_fl , notes_payable,acct_payable ," \
-              "adv_receipts , sold_for_repur_fa ,comm_payable ," \
-              "payroll_payable, taxes_payable ,int_payable ," \
-              "div_payable, oth_payable ,acc_exp ," \
-              "deferred_inc , st_bonds_payable ,payable_to_reinsurer ," \
-              "rsrv_insur_cont , acting_trading_sec,acting_uw_sec ," \
-              "non_cur_liab_due_1y, oth_cur_liab ,total_cur_liab ," \
-              "bond_payable , lt_payable ,specific_payables ," \
-              "estimated_liab , defer_tax_liab ,defer_inc_non_cur_liab ," \
-              "oth_ncl , total_ncl ,depos_oth_bfi," \
-              "deriv_liab , depos ,agency_bus_liab ," \
-              "oth_liab, prem_receiv_adva ,depos_received ," \
-              "ph_invest, reser_une_prem ,reser_outstd_claims ," \
-              "reser_lins_liab , reser_lthins_liab,indept_acc_liab ," \
-              "pledge_borr , indem_payable ,policy_div_payable ," \
-              "total_liab , treasury_share ,ordin_risk_reser," \
-              "forex_differ , invest_loss_unconf ,minority_int ," \
-              "total_hldr_eqy_exc_min_int , total_hldr_eqy_inc_min_int,total_liab_hldr_eqy ," \
-              "lt_payroll_payable , oth_comp_income,oth_eqt_tools ," \
-              "oth_eqt_tools_p_shr , lending_funds ,acc_receivable ," \
-              "st_fin_payable , payables ,hfs_assets ," \
-              "hfs_sales ) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+        sql = "insert into {0} (data_index, ts_code, ann_date, f_ann_date, end_date, report_type, comp_type, " \
+              "total_share, cap_rese, undistr_porfit, surplus_rese, special_rese, money_cap, trad_asset," \
+              "notes_receiv, accounts_receiv, oth_receiv, prepayment, div_receiv, int_receiv, inventories, " \
+              "amor_exp, nca_within_1y, sett_rsrv, loanto_oth_bank_fi, premium_receiv, reinsur_receiv, " \
+              "reinsur_res_receiv, pur_resale_fa, oth_cur_assets, total_cur_assets, fa_avail_for_sale, htm_invest," \
+              "lt_eqt_invest, invest_real_estate, time_deposits, oth_assets, lt_rec, fix_assets, cip ,const_materials," \
+              "fixed_assets_disp, produc_bio_assets, oil_and_gas_assets, intan_assets, r_and_d, goodwill ," \
+              "lt_amor_exp, defer_tax_assets, decr_in_disbur, oth_nca, total_nca, cash_reser_cb, depos_in_oth_bfi, " \
+              "prec_metals, deriv_assets, rr_reins_une_prem, rr_reins_outstd_cla, rr_reins_lins_liab," \
+              "rr_reins_lthins_liab, refund_depos, ph_pledge_loans, refund_cap_depos, indep_acct_assets, client_depos," \
+              "client_prov, transac_seat_fee, invest_as_receiv, total_assets, lt_borr, st_borr, cb_borr, " \
+              "depos_ib_deposits, loan_oth_bank, trading_fl, notes_payable, acct_payable, adv_receipts, " \
+              "sold_for_repur_fa, comm_payable, payroll_payable, taxes_payable, int_payable, div_payable, " \
+              "oth_payable, acc_exp, deferred_inc, st_bonds_payable, payable_to_reinsurer, rsrv_insur_cont, " \
+              "acting_trading_sec, acting_uw_sec, non_cur_liab_due_1y, oth_cur_liab, total_cur_liab, bond_payable, " \
+              "lt_payable, specific_payables, estimated_liab, defer_tax_liab, defer_inc_non_cur_liab, oth_ncl, " \
+              "total_ncl, depos_oth_bfi, deriv_liab, depos, agency_bus_liab, oth_liab, prem_receiv_adva, " \
+              "depos_received, ph_invest, reser_une_prem, reser_outstd_claims, reser_lins_liab, reser_lthins_liab," \
+              "indept_acc_liab, pledge_borr, indem_payable, policy_div_payable, total_liab, treasury_share, " \
+              "ordin_risk_reser, forex_differ, invest_loss_unconf, minority_int, total_hldr_eqy_exc_min_int, " \
+              "total_hldr_eqy_inc_min_int, total_liab_hldr_eqy, lt_payroll_payable, oth_comp_income, oth_eqt_tools ," \
+              "oth_eqt_tools_p_shr, lending_funds, acc_receivable, st_fin_payable, payables, hfs_assets, hfs_sales) " \
+              "values " \
+              "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
               "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
               "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
               "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
@@ -559,20 +496,15 @@ class SQLConnect:
             # if the table does not exist, program will create table and insert stock financial statements data.
             try:
                 cursor.execute(create_SQL)
-                self.logger.info("create debt table successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("create debt table Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
             try:
                 cursor.executemany(sql, data)
-                self.logger.info("insert debt data successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("insert debt data Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert debt data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
         else:
             # get table line to check to see if updates are needed.
@@ -615,25 +547,17 @@ class SQLConnect:
                     insert_missing_data.append(data[int(x)])
 
                 try:
-                    cursor.executemany(sql, insert_missing_data)
-                    self.logger.info("insert debt data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert debt data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert debt data Error")
+                    cursor.executemany(sql, data)
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             elif table_count == 0:
                 try:
                     cursor.executemany(sql, data)
-                    self.logger.info("insert debt data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert debt data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert debt data Error")
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             else:
                 return
@@ -658,19 +582,43 @@ class SQLConnect:
         table_count = 0
 
         sql = "insert into {0} " \
-              "(data_index,ts_code, ann_date, f_ann_date, end_date, comp_type, report_type, net_profit," \
-              "finan_exp, c_fr_sale_sg, recp_tax_rends, n_depos_incr_fi, n_incr_loans_cb, n_inc_borr_oth_fi, prem_fr_orig_contr," \
-              "n_incr_insured_dep,n_reinsur_prem, n_incr_disp_tfa, ifc_cash_incr, n_incr_disp_faas, n_incr_loans_oth_bank, n_cap_incr_repur," \
-              " c_fr_oth_operate_a,c_inf_fr_operate_a, c_paid_goods_s, c_paid_to_for_empl, c_paid_for_taxes, n_incr_clt_loan_adv, n_incr_dep_cbob," \
-              "c_pay_claims_orig_inco, pay_handling_chrg, pay_comm_insur_plcy, oth_cash_pay_oper_act, st_cash_out_act, n_cashflow_act, oth_recp_ral_inv_act," \
-              " c_disp_withdrwl_invest, c_recp_return_invest,n_recp_disp_fiolta, n_recp_disp_sobu, stot_inflows_inv_act, c_pay_acq_const_fiolta, c_paid_invest," \
-              " n_disp_subs_oth_biz, oth_pay_ral_inv_act,n_incr_pledge_loan, stot_out_inv_act, n_cashflow_inv_act, c_recp_borrow, proc_issue_bonds," \
-              "oth_cash_recp_ral_fnc_act, stot_cash_in_fnc_act, free_cashflow, c_prepay_amt_borr, c_pay_dist_dpcp_int_exp, incl_dvd_profit_paid_sc_ms, oth_cashpay_ral_fnc_act," \
-              "stot_cashout_fnc_act, n_cash_flows_fnc_act, eff_fx_flu_cash, n_incr_cash_cash_equ, c_cash_equ_beg_period, c_cash_equ_end_period, c_recp_cap_contrib," \
-              "incl_cash_rec_saims, uncon_invest_loss, prov_depr_assets,depr_fa_coga_dpba,amort_intang_assets,lt_amort_deferred_exp,decr_deferred_exp," \
-              "incr_acc_exp,loss_disp_fiolta,loss_scr_fa,loss_fv_chg,invest_loss,decr_def_inc_tax_assets,incr_def_inc_tax_liab," \
-              "decr_inventories,decr_oper_payable,incr_oper_payable,others,im_net_cashflow_oper_act,conv_debt_into_cap,conv_copbonds_due_within_1y," \
-              "fa_fnc_leases,end_bal_cash,beg_bal_cash,end_bal_cash_equ,beg_bal_cash_equ,im_n_incr_cash_equ)" \
+              "(data_index , ts_code , ann_date , " \
+              "f_ann_date , end_date , comp_type , " \
+              "report_type ,net_profit , finan_exp , " \
+              "c_fr_sale_sg , recp_tax_rends , n_depos_incr_fi , " \
+              "n_incr_loans_cb , n_inc_borr_oth_fi , prem_fr_orig_contr , " \
+              "n_incr_insured_dep ,n_reinsur_prem , n_incr_disp_tfa , " \
+              "ifc_cash_incr , n_incr_disp_faas , n_incr_loans_oth_bank , " \
+              "n_cap_incr_repur , c_fr_oth_operate_a ,c_inf_fr_operate_a , " \
+              "c_paid_goods_s , c_paid_to_for_empl , c_paid_for_taxes , " \
+              "n_incr_clt_loan_adv , n_incr_dep_cbob , " \
+              "c_pay_claims_orig_inco , pay_handling_chrg , " \
+              "pay_comm_insur_plcy , oth_cash_pay_oper_act , " \
+              "st_cash_out_act , n_cashflow_act , oth_recp_ral_inv_act ," \
+              "c_disp_withdrwl_invest , c_recp_return_invest , " \
+              "n_recp_disp_fiolta , n_recp_disp_sobu , " \
+              "stot_inflows_inv_act , c_pay_acq_const_fiolta , " \
+              "c_paid_invest , n_disp_subs_oth_biz , oth_pay_ral_inv_act , " \
+              "n_incr_pledge_loan , stot_out_inv_act , " \
+              "n_cashflow_inv_act , c_recp_borrow , proc_issue_bonds ," \
+              "oth_cash_recp_ral_fnc_act , stot_cash_in_fnc_act , " \
+              "free_cashflow , c_prepay_amt_borr , " \
+              "c_pay_dist_dpcp_int_exp , incl_dvd_profit_paid_sc_ms , " \
+              "oth_cashpay_ral_fnc_act , stot_cashout_fnc_act , " \
+              "n_cash_flows_fnc_act , eff_fx_flu_cash , " \
+              "n_incr_cash_cash_equ , c_cash_equ_beg_period , " \
+              "c_cash_equ_end_period , c_recp_cap_contrib ," \
+              "incl_cash_rec_saims , uncon_invest_loss , " \
+              "prov_depr_assets , depr_fa_coga_dpba , " \
+              "amort_intang_assets , lt_amort_deferred_exp , " \
+              "decr_deferred_exp , incr_acc_exp , loss_disp_fiolta , " \
+              "loss_scr_fa , loss_fv_chg , invest_loss , " \
+              "decr_def_inc_tax_assets ,incr_def_inc_tax_liab ," \
+              "decr_inventories , decr_oper_payable , incr_oper_payable , " \
+              "others , im_net_cashflow_oper_act , conv_debt_into_cap , " \
+              "conv_copbonds_due_within_1y , fa_fnc_leases , " \
+              "end_bal_cash , beg_bal_cash , end_bal_cash_equ , " \
+              "beg_bal_cash_equ , im_n_incr_cash_equ)" \
               "values" \
               "(%s, %s, %s, %s, %s ,%s, %s, %s, " \
               "%s, %s, %s, %s, %s, %s, %s, %s, " \
@@ -688,19 +636,43 @@ class SQLConnect:
               "%s, %s, %s, %s, %s, %s)".format(table_name)
 
         create_SQL = "create table {0} " \
-                     "(data_index int primary key, ts_code varchar (20), ann_date varchar (20), f_ann_date varchar (20), end_date varchar (20), comp_type varchar (20), report_type varchar (20), net_profit varchar (20)," \
-                     "finan_exp varchar (20), c_fr_sale_sg varchar (20), recp_tax_rends varchar (20), n_depos_incr_fi varchar (20), n_incr_loans_cb varchar (20), n_inc_borr_oth_fi varchar (20), prem_fr_orig_contr varchar (20), " \
-                     "n_incr_insured_dep varchar (20),n_reinsur_prem varchar (20), n_incr_disp_tfa varchar (20), ifc_cash_incr varchar (20), n_incr_disp_faas varchar (20), n_incr_loans_oth_bank varchar (20), n_cap_incr_repur varchar (20)," \
-                     " c_fr_oth_operate_a varchar (20),c_inf_fr_operate_a varchar (20), c_paid_goods_s varchar (20), c_paid_to_for_empl varchar (20), c_paid_for_taxes varchar (20), n_incr_clt_loan_adv varchar (20), n_incr_dep_cbob varchar (20)," \
-                     "c_pay_claims_orig_inco varchar (20), pay_handling_chrg varchar (20), pay_comm_insur_plcy varchar (20), oth_cash_pay_oper_act varchar (20), st_cash_out_act varchar (20), n_cashflow_act varchar (20), oth_recp_ral_inv_act varchar (20)," \
-                     " c_disp_withdrwl_invest varchar (20), c_recp_return_invest varchar (20),n_recp_disp_fiolta varchar (20), n_recp_disp_sobu varchar (20), stot_inflows_inv_act varchar (20), c_pay_acq_const_fiolta varchar (20), c_paid_invest varchar (20)," \
-                     " n_disp_subs_oth_biz varchar (20), oth_pay_ral_inv_act varchar (20),n_incr_pledge_loan varchar (20), stot_out_inv_act varchar (20), n_cashflow_inv_act varchar (20), c_recp_borrow varchar (20), proc_issue_bonds varchar (20)," \
-                     "oth_cash_recp_ral_fnc_act varchar (20), stot_cash_in_fnc_act varchar (20), free_cashflow varchar (20), c_prepay_amt_borr varchar (20), c_pay_dist_dpcp_int_exp varchar (20), incl_dvd_profit_paid_sc_ms varchar (20), oth_cashpay_ral_fnc_act varchar (20)," \
-                     "stot_cashout_fnc_act varchar (20), n_cash_flows_fnc_act varchar (20), eff_fx_flu_cash varchar (20), n_incr_cash_cash_equ varchar (20), c_cash_equ_beg_period varchar (20), c_cash_equ_end_period varchar (20), c_recp_cap_contrib varchar (20)," \
-                     "incl_cash_rec_saims varchar (20), uncon_invest_loss varchar (20), prov_depr_assets varchar (20),depr_fa_coga_dpba varchar (20),amort_intang_assets varchar (20),lt_amort_deferred_exp varchar (20),decr_deferred_exp varchar (20)," \
-                     "incr_acc_exp varchar (20),loss_disp_fiolta varchar (20),loss_scr_fa varchar (20),loss_fv_chg varchar (20),invest_loss varchar (20),decr_def_inc_tax_assets varchar (20),incr_def_inc_tax_liab varchar (20)," \
-                     "decr_inventories varchar (20),decr_oper_payable varchar (20),incr_oper_payable varchar (20),others varchar (20),im_net_cashflow_oper_act varchar (20),conv_debt_into_cap varchar (20),conv_copbonds_due_within_1y varchar (20)," \
-                     "fa_fnc_leases varchar (20),end_bal_cash varchar (20),beg_bal_cash varchar (20),end_bal_cash_equ varchar (20),beg_bal_cash_equ varchar (20),im_n_incr_cash_equ varchar (20))" \
+                     "(data_index int primary key, ts_code varchar (20), ann_date varchar (20), " \
+                     "f_ann_date varchar (20), end_date varchar (20), comp_type varchar (20), " \
+                     "report_type varchar (20),net_profit varchar (20), finan_exp varchar (20), " \
+                     "c_fr_sale_sg varchar (20), recp_tax_rends varchar (20), n_depos_incr_fi varchar (20), " \
+                     "n_incr_loans_cb varchar (20), n_inc_borr_oth_fi varchar (20), prem_fr_orig_contr varchar (20), " \
+                     "n_incr_insured_dep varchar (20),n_reinsur_prem varchar (20), n_incr_disp_tfa varchar (20), " \
+                     "ifc_cash_incr varchar (20), n_incr_disp_faas varchar (20), n_incr_loans_oth_bank varchar (20), " \
+                     "n_cap_incr_repur varchar (20), c_fr_oth_operate_a varchar (20),c_inf_fr_operate_a varchar (20), " \
+                     "c_paid_goods_s varchar (20), c_paid_to_for_empl varchar (20), c_paid_for_taxes varchar (20), " \
+                     "n_incr_clt_loan_adv varchar (20), n_incr_dep_cbob varchar (20), " \
+                     "c_pay_claims_orig_inco varchar (20), pay_handling_chrg varchar (20), " \
+                     "pay_comm_insur_plcy varchar (20), oth_cash_pay_oper_act varchar (20), " \
+                     "st_cash_out_act varchar (20), n_cashflow_act varchar (20), oth_recp_ral_inv_act varchar (20)," \
+                     "c_disp_withdrwl_invest varchar (20), c_recp_return_invest varchar (20), " \
+                     "n_recp_disp_fiolta varchar (20), n_recp_disp_sobu varchar (20), " \
+                     "stot_inflows_inv_act varchar (20), c_pay_acq_const_fiolta varchar (20), " \
+                     "c_paid_invest varchar (20), n_disp_subs_oth_biz varchar (20), oth_pay_ral_inv_act varchar (20), " \
+                     "n_incr_pledge_loan varchar (20), stot_out_inv_act varchar (20), " \
+                     "n_cashflow_inv_act varchar (20), c_recp_borrow varchar (20), proc_issue_bonds varchar (20)," \
+                     "oth_cash_recp_ral_fnc_act varchar (20), stot_cash_in_fnc_act varchar (20), " \
+                     "free_cashflow varchar (20), c_prepay_amt_borr varchar (20), " \
+                     "c_pay_dist_dpcp_int_exp varchar (20), incl_dvd_profit_paid_sc_ms varchar (20), " \
+                     "oth_cashpay_ral_fnc_act varchar (20), stot_cashout_fnc_act varchar (20), " \
+                     "n_cash_flows_fnc_act varchar (20), eff_fx_flu_cash varchar (20), " \
+                     "n_incr_cash_cash_equ varchar (20), c_cash_equ_beg_period varchar (20), " \
+                     "c_cash_equ_end_period varchar (20), c_recp_cap_contrib varchar (20)," \
+                     "incl_cash_rec_saims varchar (20), uncon_invest_loss varchar (20), " \
+                     "prov_depr_assets varchar (20), depr_fa_coga_dpba varchar (20), " \
+                     "amort_intang_assets varchar (20), lt_amort_deferred_exp varchar (20), " \
+                     "decr_deferred_exp varchar (20), incr_acc_exp varchar (20), loss_disp_fiolta varchar (20), " \
+                     "loss_scr_fa varchar (20), loss_fv_chg varchar (20), invest_loss varchar (20), " \
+                     "decr_def_inc_tax_assets varchar (20),incr_def_inc_tax_liab varchar (20)," \
+                     "decr_inventories varchar (20), decr_oper_payable varchar (20), incr_oper_payable varchar (20), " \
+                     "others varchar (20), im_net_cashflow_oper_act varchar (20), conv_debt_into_cap varchar (20), " \
+                     "conv_copbonds_due_within_1y varchar (20), fa_fnc_leases varchar (20), " \
+                     "end_bal_cash varchar (20), beg_bal_cash varchar (20), end_bal_cash_equ varchar (20), " \
+                     "beg_bal_cash_equ varchar (20), im_n_incr_cash_equ varchar (20))" \
             .format(table_name)
 
         if str.lower(table_name) not in self.table_tuple:
@@ -710,19 +682,13 @@ class SQLConnect:
             try:
                 cursor.execute(create_SQL)
                 self.logger.info("create cashflow table successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("create cashflow table Error")
-
+            except Exception as ex:
+                self.logger.error(ex)
             try:
                 cursor.executemany(sql, data)
-                self.logger.info("insert cashflow data successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("insert cashflow data Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert cashflow data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
         else:
             # get table line to check to see if updates are needed.
@@ -765,25 +731,17 @@ class SQLConnect:
                     insert_missing_data.append(data[int(x)])
 
                 try:
-                    cursor.executemany(sql, insert_missing_data)
-                    self.logger.info("insert cashflow data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert cashflow data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert cashflow data Error")
-
+                    cursor.executemany(sql, data)
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
             elif table_count == 0:
                 try:
                     cursor.executemany(sql, data)
-                    self.logger.info("insert cashflow data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert cashflow data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert cashflow data Error")
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
+
 
             else:
                 return
@@ -803,24 +761,21 @@ class SQLConnect:
 
         :return:
         """
+
         table_count = 0
         self.show_table()
 
         cursor = self.connect.cursor()
 
-        sql = "insert into {0} (data_index, ts_code ," \
-              "ann_date, end_date," \
-              "type," \
-              "p_change_min , p_change_max , net_profit_min ," \
-              "net_profit_max , last_parent_net, first_ann_date ," \
-              "summary, change_reason ) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" \
-            .format(table_name)
+        sql = "insert into {0} (data_index, ts_code, ann_date, end_date, type, p_change_min, p_change_max, " \
+              "net_profit_min, net_profit_max, last_parent_net, first_ann_date, summary, change_reason) " \
+              "values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)".format(table_name)
 
-        create_SQL = "create table {0} (data_index int primary key,ts_code varchar (30)," \
+        create_SQL = "create table {0} (data_index int primary key, ts_code varchar (30)," \
                      "ann_date varchar (30), end_date varchar (30), type varchar (30), " \
                      "p_change_min varchar (30), p_change_max varchar (30), net_profit_min varchar (30)," \
                      "net_profit_max varchar (30), last_parent_net varchar (30), first_ann_date varchar (30)," \
-                     "summary varchar (30), change_reason varchar (3000)) ENGINE=InnoDB " \
+                     "summary varchar (3000), change_reason varchar (3000)) ENGINE=InnoDB " \
                      "DEFAULT CHARSET=utf8;".format(table_name)
 
         if str.lower(table_name) not in self.table_tuple:
@@ -829,20 +784,15 @@ class SQLConnect:
             # if the table does not exist, program will create table and insert stock financial statements data.
             try:
                 cursor.execute(create_SQL)
-                self.logger.info("create forecast table successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("create forecast table Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
             try:
                 cursor.executemany(sql, data)
-                self.logger.info("insert forecast data successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("insert forecast data Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert forecast data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
         else:
             # get table line to check to see if updates are needed.
@@ -885,25 +835,18 @@ class SQLConnect:
                     insert_missing_data.append(data[int(x)])
 
                 try:
-                    cursor.executemany(sql, insert_missing_data)
-                    self.logger.info("insert forecast data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert forecast data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert forecast data Error")
+                    cursor.executemany(sql, data)
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             elif table_count == 0:
                 try:
                     cursor.executemany(sql, data)
-                    self.logger.info("insert forecast data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert forecast data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert forecast data Error")
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
+
 
             else:
                 return
@@ -928,14 +871,9 @@ class SQLConnect:
 
         cursor = self.connect.cursor()
 
-        sql = "insert into {0} (data_index, ts_code ," \
-              "end_date, ann_date, div_proc, " \
-              "stk_div , stk_bo_rate , stk_co_rate," \
-              "cash_div , cash_div_tax , record_date ," \
-              "ex_date , pay_date, div_listdate ," \
-              "imp_ann_date) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-              "%s, %s, %s, %s)" \
-            .format(table_name)
+        sql = "insert into {0} (data_index, ts_code , end_date, ann_date, div_proc, stk_div, stk_bo_rate, stk_co_rate," \
+              "cash_div, cash_div_tax, record_date, ex_date, pay_date, div_listdate, imp_ann_date) " \
+              "values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)".format(table_name)
 
         create_SQL = "create table {0} (data_index int primary key,ts_code varchar (20)," \
                      "end_date varchar (20), ann_date varchar (20), div_proc varchar (20), " \
@@ -951,20 +889,15 @@ class SQLConnect:
             # if the table does not exist, program will create table and insert stock financial statements data.
             try:
                 cursor.execute(create_SQL)
-                self.logger.info("create dividend table successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("create dividend table Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
             try:
                 cursor.executemany(sql, data)
-                self.logger.info("insert dividend data successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("insert dividend data Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert dividend data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
         else:
             # get table line to check to see if updates are needed.
@@ -1007,25 +940,17 @@ class SQLConnect:
                     insert_missing_data.append(data[int(x)])
 
                 try:
-                    cursor.executemany(sql, insert_missing_data)
-                    self.logger.info("insert dividend data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert dividend data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert dividend data Error")
+                    cursor.executemany(sql, data)
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             elif table_count == 0:
                 try:
                     cursor.executemany(sql, data)
-                    self.logger.info("insert dividend data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert dividend data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert dividend data Error")
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             else:
                 return
@@ -1078,19 +1003,14 @@ class SQLConnect:
             try:
                 cursor.execute(create_SQL)
                 self.logger.info("create express table successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("create express table Error")
+            except Exception as ex:
+                self.logger.error(ex)
 
             try:
                 cursor.executemany(sql, data)
-                self.logger.info("insert express data successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("insert express data Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert express data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
         else:
             # get table line to check to see if updates are needed.
@@ -1133,25 +1053,17 @@ class SQLConnect:
                     insert_missing_data.append(data[int(x)])
 
                 try:
-                    cursor.executemany(sql, insert_missing_data)
-                    self.logger.info("insert express data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert express data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert express data Error")
+                    cursor.executemany(sql, data)
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             elif table_count == 0:
                 try:
                     cursor.executemany(sql, data)
-                    self.logger.info("insert express data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert express data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert express data Error")
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             else:
                 return
@@ -1176,39 +1088,43 @@ class SQLConnect:
 
         cursor = self.connect.cursor()
 
-        sql = "insert into {0} (data_index, ts_code,ann_date,end_date,eps," \
-              "dt_eps,total_revenue_ps,revenue_ps,capital_rese_ps,surplus_rese_ps," \
-              "undist_profit_ps	,extra_item	,profit_dedt,gross_margin,current_ratio," \
-              "quick_ratio,cash_ratio,invturn_days,arturn_days	,inv_turn," \
-              "ar_turn,ca_turn,fa_turn,assets_turn,op_income," \
-              "valuechange_income, interst_income,daa,ebit,ebitda," \
-              "fcff,fcfe,current_exint,noncurrent_exint	,interestdebt," \
-              "netdebt,tangible_asset,working_capital,networking_capital,invest_capital	," \
-              "retained_earnings,diluted2_eps,bps,ocfps	,retainedps	," \
-              "cfps	,ebit_ps,fcff_ps,fcfe_ps ,netprofit_margin ," \
-              "grossprofit_margin	,cogs_of_sales	,expense_of_sales,profit_to_gr	,saleexp_to_gr	," \
-              "adminexp_of_gr	,finaexp_of_gr	,impai_ttm	,gc_of_gr	,op_of_gr	," \
-              "ebit_of_gr	,roe	,roe_waa,roe_dt	,roa	," \
-              "npta,roic,roe_yearly	,roa2_yearly	,roe_avg	," \
-              "opincome_of_ebt	,investincome_of_ebt	,n_op_profit_of_ebt	,tax_to_ebt	,dtprofit_to_profit	," \
-              "salescash_to_or	,ocf_to_or	,ocf_to_opincome	,capitalized_to_da	,debt_to_assets	," \
-              "assets_to_eqt	,dp_assets_to_eqt	,ca_to_assets	,nca_to_assets	,tbassets_to_totalassets	," \
-              "int_to_talcap	,eqt_to_talcapital	,currentdebt_to_debt	,longdeb_to_debt	,ocf_to_shortdebt	," \
-              "debt_to_eqt	,eqt_to_debt	,eqt_to_interestdebt	,tangibleasset_to_debt	,tangasset_to_intdebt," \
-              "tangibleasset_to_netdebt	,ocf_to_debt	,ocf_to_interestdebt	,ocf_to_netdebt	,ebit_to_interest	," \
-              "longdebt_to_workingcapital	,ebitda_to_debt	,turn_days	,roa_yearly	,roa_dp	," \
-              "fixed_assets	,profit_prefin_exp	,non_op_profit	,op_to_ebt	,nop_to_ebt	," \
-              "ocf_to_profit	,cash_to_liqdebt	,cash_to_liqdebt_withinterest	,op_to_liqdebt	,op_to_debt	," \
-              "roic_yearly	,profit_to_op	,q_opincome	,q_investincome,q_dtprofit	," \
-              "q_eps	,q_netprofit_margin	,q_gsprofit_margin	,q_exp_to_sales	,q_profit_to_gr	," \
-              "q_saleexp_to_gr	,q_adminexp_to_gr	,q_finaexp_to_gr	,q_impair_to_gr_ttm	,q_gc_to_gr	," \
-              "q_op_to_gr	,q_roe	,q_dt_roe	,q_npta	,q_opincome_to_ebt	," \
-              "q_investincome_to_ebt	,q_dtprofit_to_profit	,q_salescash_to_or	,q_ocf_to_sales	,q_ocf_to_or," \
-              "basic_eps_yoy	,dt_eps_yoy	,cfps_yoy	,op_yoy	,ebt_yoy	," \
-              "netprofit_yoy,dt_netprofit_yoy	,ocf_yoy	,roe_yoy,bps_yoy	," \
-              "assets_yoy,eqt_yoy	,tr_yoy	,or_yoy,q_gr_yoy	," \
-              "q_gr_qoq	,q_sales_yoy,q_sales_qoq	,q_op_yoy,q_op_qoq	," \
-              "q_profit_yoy	,q_profit_qoq	,q_netprofit_yoy	,q_netprofit_qoq,equity_yoy,rd_exp) " \
+        sql = "insert into {0} (data_index,ts_code,ann_date," \
+              "end_date,eps,dt_eps," \
+              "total_revenue_ps,revenue_ps,capital_rese_ps," \
+              "surplus_rese_ps,undist_profit_ps,extra_item," \
+              "profit_dedt,gross_margin,current_ratio," \
+              "quick_ratio,cash_ratio,ar_turn," \
+              "ca_turn,fa_turn,assets_turn," \
+              "op_income,ebit,ebitda," \
+              "fcff,fcfe,current_exint," \
+              "noncurrent_exint,interestdebt,netdebt," \
+              "tangible_asset,working_capital,networking_capital," \
+              "invest_capital,retained_earnings,diluted2_eps," \
+              "bps,ocfps,retainedps," \
+              "cfps,ebit_ps,fcff_ps," \
+              "fcfe_ps,netprofit_margin,grossprofit_margin," \
+              "cogs_of_sales,expense_of_sales,profit_to_gr," \
+              "saleexp_to_gr,adminexp_of_gr,finaexp_of_gr," \
+              "impai_ttm,gc_of_gr,op_of_gr," \
+              "ebit_of_gr,roe,roe_waa," \
+              "roe_dt,roa,npta," \
+              "roic,roe_yearly,roa2_yearly," \
+              "debt_to_assets,assets_to_eqt,dp_assets_to_eqt," \
+              "ca_to_assets,nca_to_assets,tbassets_to_totalassets," \
+              "int_to_talcap,eqt_to_talcapital,currentdebt_to_debt," \
+              "longdeb_to_debt,ocf_to_shortdebt,debt_to_eqt," \
+              "eqt_to_debt,eqt_to_interestdebt,tangibleasset_to_debt," \
+              "tangasset_to_intdebt,tangibleasset_to_netdebt,ocf_to_debt," \
+              "turn_days,roa_yearly,roa_dp," \
+              "fixed_assets,profit_to_op,q_saleexp_to_gr," \
+              "q_gc_to_gr,q_roe,q_dt_roe," \
+              "q_npta,q_ocf_to_sales,basic_eps_yoy," \
+              "dt_eps_yoy,cfps_yoy,op_yoy," \
+              "ebt_yoy,netprofit_yoy,dt_netprofit_yoy," \
+              "ocf_yoy,roe_yoy,bps_yoy," \
+              "assets_yoy,eqt_yoy,tr_yoy," \
+              "or_yoy,q_sales_yoy,q_op_qoq," \
+              "equity_yoy) " \
               "values" \
               "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
               "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
@@ -1220,61 +1136,46 @@ class SQLConnect:
               "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
               "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
               "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-              "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-              "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-              "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-              "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-              "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-              "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-              "%s, %s, %s, %s, %s, %s)" \
+              "%s, %s, %s, %s, %s, %s, %s, %s, %s)" \
             .format(table_name)
 
-        create_SQL = "create table {0} (data_index int primary key, ts_code varchar(20), ann_date varchar(20)," \
-                     "end_date varchar(20),eps	varchar(20), dt_eps varchar(20), total_revenue_ps varchar(20)," \
-                     "revenue_ps varchar(20), capital_rese_ps varchar(20), surplus_rese_ps varchar(20)," \
-                     "undist_profit_ps varchar(20),extra_item varchar(20), profit_dedt varchar(20)," \
-                     "gross_margin varchar(20),current_ratio varchar(20), quick_ratio varchar(20)," \
-                     "cash_ratio varchar(20),invturn_days varchar(20),arturn_days varchar(20),inv_turn varchar(20)," \
-                     "ar_turn varchar(20),ca_turn varchar(20),fa_turn varchar(20),assets_turn varchar(20)," \
-                     "op_income varchar(20), valuechange_income varchar(20), interst_income varchar(20)," \
-                     "daa varchar(20), ebit varchar(20), ebitda varchar(20), fcff varchar(20), fcfe varchar(20)," \
-                     "current_exint varchar(20),noncurrent_exint varchar(20), interestdebt varchar(20)," \
-                     "retained_earnings varchar(20), diluted2_eps varchar(20), bps varchar(20),ocfps varchar(20)," \
-                     "retainedps varchar(20), cfps varchar(20), ebit_ps varchar(20),fcff_ps varchar(20)," \
-                     "fcfe_ps varchar(20),netprofit_margin varchar(20), grossprofit_margin varchar(20)," \
-                     "cogs_of_sales	varchar(20),expense_of_sales varchar(20),profit_to_gr varchar(20)," \
-                     "saleexp_to_gr	varchar(20), adminexp_of_gr	varchar(20),finaexp_of_gr varchar(20)," \
-                     "impai_ttm	varchar(20), gc_of_gr varchar(20), op_of_gr varchar(20), ebit_of_gr	varchar(20)," \
-                     "roe varchar(20), roe_waa varchar(20), roe_dt varchar(20), roa varchar(20), npta varchar(20)," \
-                     "roic varchar(20), roe_yearly varchar(20), roa2_yearly varchar(20), roe_avg varchar(20)," \
-                     "salescash_to_or varchar(20), ocf_to_or varchar(20),ocf_to_opincome varchar(20)," \
-                     "capitalized_to_da	varchar(20), debt_to_assets varchar(20),assets_to_eqt varchar(20)," \
-                     "dp_assets_to_eqt varchar(20),ca_to_assets varchar(20), nca_to_assets varchar(20)," \
-                     "tbassets_to_totalassets varchar(20), int_to_talcap varchar(20), eqt_to_talcapital	varchar(20)," \
-                     "currentdebt_to_debt varchar(20), longdeb_to_debt varchar(20), ocf_to_shortdebt varchar(20)," \
-                     "debt_to_eqt varchar(20),eqt_to_debt varchar(20),eqt_to_interestdebt varchar(20)," \
-                     "tangibleasset_to_debt	varchar(20), tangasset_to_intdebt varchar(20), " \
-                     "tangibleasset_to_netdebt varchar(20), ocf_to_debt varchar(20), ocf_to_interestdebt varchar(20)," \
-                     "ocf_to_netdebt varchar(20), ebit_to_interest varchar(20), longdebt_to_workingcapital varchar(20)," \
-                     "ebitda_to_debt varchar(20), turn_days varchar(20), roa_yearly varchar(20), roa_dp varchar(20)," \
-                     "fixed_assets varchar(20), profit_prefin_exp varchar(20), non_op_profit varchar(20)," \
-                     "op_to_ebt	varchar(20), nop_to_ebt varchar(20), ocf_to_profit varchar(20)," \
-                     "cash_to_liqdebt varchar(20), cash_to_liqdebt_withinterest	varchar(20), op_to_liqdebt varchar(20)," \
-                     "op_to_debt varchar(20), roic_yearly varchar(20), profit_to_op varchar(20), q_eps	varchar(20)," \
-                     "q_netprofit_margin varchar(20), q_gsprofit_margin	varchar(20), q_exp_to_sales	varchar(20)," \
-                     "q_profit_to_gr varchar(20), q_saleexp_to_gr varchar(20), q_adminexp_to_gr	varchar(20)," \
-                     "q_finaexp_to_gr varchar(20),q_impair_to_gr_ttm varchar(20), q_gc_to_gr varchar(20)," \
-                     "q_op_to_gr varchar(20), q_roe	varchar(20), q_dt_roe varchar(20), q_npta varchar(20)," \
-                     "q_opincome_to_ebt	varchar(20), q_investincome_to_ebt varchar(20)," \
-                     "q_dtprofit_to_profit varchar(20), q_salescash_to_or varchar(20), q_ocf_to_sales varchar(20)," \
-                     "q_ocf_to_or varchar(20), basic_eps_yoy varchar(20), dt_eps_yoy varchar(20), cfps_yoy varchar(20)," \
-                     "op_yoy varchar(20), ebt_yoy varchar(20), netprofit_yoy varchar(20), dt_netprofit_yoy varchar(20)," \
-                     "ocf_yoy varchar(20),roe_yoy varchar(20),bps_yoy	varchar(20), assets_yoy varchar(20), " \
-                     "eqt_yoy varchar(20),tr_yoy varchar(20),or_yoy varchar(20),q_gr_yoy varchar(20)," \
-                     "q_gr_qoq varchar(20), q_sales_yoy varchar(20), q_sales_qoq varchar(20), q_op_yoy varchar(20)," \
-                     "q_op_qoq varchar(20), q_profit_yoy varchar(20),q_profit_qoq varchar(20)," \
-                     "q_netprofit_yoy varchar(20), q_netprofit_qoq varchar(20), equity_yoy varchar(20)," \
-                     "rd_exp varchar(20)) ENGINE=InnoDB DEFAULT CHARSET=utf8;".format(table_name)
+        create_SQL = "create table {0} (data_index int primary key,ts_code varchar(20),ann_date varchar(20)," \
+                     "end_date varchar(20),eps varchar(20),dt_eps varchar(20)," \
+                     "total_revenue_ps varchar(20),revenue_ps varchar(20),capital_rese_ps varchar(20)," \
+                     "surplus_rese_ps varchar(20),undist_profit_ps varchar(20),extra_item varchar(20)," \
+                     "profit_dedt varchar(20),gross_margin varchar(20),current_ratio varchar(20)," \
+                     "quick_ratio varchar(20),cash_ratio varchar(20),ar_turn varchar(20)," \
+                     "ca_turn varchar(20),fa_turn varchar(20),assets_turn varchar(20)," \
+                     "op_income varchar(20),ebit varchar(20),ebitda varchar(20)," \
+                     "fcff varchar(20),fcfe varchar(20),current_exint varchar(20)," \
+                     "noncurrent_exint varchar(20),interestdebt varchar(20),netdebt varchar(20)," \
+                     "tangible_asset varchar(20),working_capital varchar(20),networking_capital varchar(20)," \
+                     "invest_capital varchar(20),retained_earnings varchar(20),diluted2_eps varchar(20)," \
+                     "bps varchar(20),ocfps varchar(20),retainedps varchar(20)," \
+                     "cfps varchar(20),ebit_ps varchar(20),fcff_ps varchar(20)," \
+                     "fcfe_ps varchar(20),netprofit_margin varchar(20),grossprofit_margin varchar(20)," \
+                     "cogs_of_sales varchar(20),expense_of_sales varchar(20),profit_to_gr varchar(20)," \
+                     "saleexp_to_gr varchar(20),adminexp_of_gr varchar(20),finaexp_of_gr varchar(20)," \
+                     "impai_ttm varchar(20),gc_of_gr varchar(20),op_of_gr varchar(20)," \
+                     "ebit_of_gr varchar(20),roe varchar(20),roe_waa varchar(20)," \
+                     "roe_dt varchar(20),roa varchar(20),npta varchar(20)," \
+                     "roic varchar(20),roe_yearly varchar(20),roa2_yearly varchar(20)," \
+                     "debt_to_assets varchar(20),assets_to_eqt varchar(20),dp_assets_to_eqt varchar(20)," \
+                     "ca_to_assets varchar(20),nca_to_assets varchar(20),tbassets_to_totalassets varchar(20)," \
+                     "int_to_talcap varchar(20),eqt_to_talcapital varchar(20),currentdebt_to_debt varchar(20)," \
+                     "longdeb_to_debt varchar(20),ocf_to_shortdebt varchar(20),debt_to_eqt varchar(20)," \
+                     "eqt_to_debt varchar(20),eqt_to_interestdebt varchar(20),tangibleasset_to_debt varchar(20)," \
+                     "tangasset_to_intdebt varchar(20),tangibleasset_to_netdebt varchar(20),ocf_to_debt varchar(20)," \
+                     "turn_days varchar(20),roa_yearly varchar(20),roa_dp varchar(20)," \
+                     "fixed_assets varchar(20),profit_to_op varchar(20),q_saleexp_to_gr varchar(20)," \
+                     "q_gc_to_gr varchar(20),q_roe varchar(20),q_dt_roe varchar(20)," \
+                     "q_npta varchar(20),q_ocf_to_sales varchar(20),basic_eps_yoy varchar(20)," \
+                     "dt_eps_yoy varchar(20),cfps_yoy varchar(20),op_yoy varchar(20)," \
+                     "ebt_yoy varchar(20),netprofit_yoy varchar(20),dt_netprofit_yoy varchar(20)," \
+                     "ocf_yoy varchar(20),roe_yoy varchar(20),bps_yoy varchar(20)," \
+                     "assets_yoy varchar(20),eqt_yoy varchar(20),tr_yoy varchar(20)," \
+                     "or_yoy varchar(20),q_sales_yoy varchar(20),q_op_qoq varchar(20)," \
+                     "equity_yoy varchar(20)) ENGINE=InnoDB DEFAULT CHARSET=utf8;".format(table_name)
 
         if str.lower(table_name) not in self.table_tuple:
             # check whether the table name exists.
@@ -1282,20 +1183,15 @@ class SQLConnect:
             # if the table does not exist, program will create table and insert stock financial statements data.
             try:
                 cursor.execute(create_SQL)
-                self.logger.info("create fina_indicator table successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("create fina_indicator table Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
             try:
                 cursor.executemany(sql, data)
-                self.logger.info("insert fina_indicator data successful")
-            except pymysql.err.ProgrammingError:
-                self.connect.rollback()
-                self.logger.error("insert fina_indicator data Error")
-            except pymysql.err.IntegrityError:
-                self.connect.rollback()
-                self.logger.error("pymysql.err.IntegrityError:insert fina_indicator data Error")
+                self.logger.info("")
+            except Exception as ex:
+                self.logger.error(ex)
 
         else:
             # get table line to check to see if updates are needed.
@@ -1338,25 +1234,16 @@ class SQLConnect:
                     insert_missing_data.append(data[int(x)])
 
                 try:
-                    cursor.executemany(sql, insert_missing_data)
-                    self.logger.info("insert fina_indicator data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert fina_indicator data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert fina_indicator data Error")
+                    cursor.executemany(sql, data)
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
 
             elif table_count == 0:
                 try:
                     cursor.executemany(sql, data)
-                    self.logger.info("insert fina_indicator data successful")
-                except pymysql.err.ProgrammingError:
-                    self.connect.rollback()
-                    self.logger.error("insert fina_indicator data Error")
-                except pymysql.err.IntegrityError:
-                    self.connect.rollback()
-                    self.logger.error("pymysql.err.IntegrityError:insert fina_indicator data Error")
-
+                    self.logger.info("")
+                except Exception as ex:
+                    self.logger.error(ex)
             else:
                 return
