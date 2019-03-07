@@ -287,7 +287,9 @@ class InsertInformation:
                         cashflow_data_list.append(cf_tuple)
 
                 # read forecast data file and insert data to database.
+                # future processing
                 while True:
+                    break
                     fc = open_fc_forecast_file.readline()
                     fc_data = fc.split(",")
 
