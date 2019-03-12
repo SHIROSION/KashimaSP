@@ -2,7 +2,7 @@
 # coding=utf-8
 
 """
-@module  : SQLConnect.py
+@module  : sql_insert.py
 @author  : Rinne
 @contact : yejunbin123@qq.com
 @time    : 2019 / 01 / 22

@@ -2,7 +2,7 @@
 # coding=utf-8
 
 """
-@module  : SQLConnect.py
+@module  : sql_insert.py
 @author  : Rinne
 @contact : yejunbin123@qq.com
 @time    : 2019 / 01 / 22
@@ -13,7 +13,7 @@ import logging
 import pymysql
 
 
-class SQLConnect:
+class stock_price:
     """Connect mysql and SQL operation.
 
     this class main to connect mysql to insert stock data and create table.
@@ -1094,14 +1094,9 @@ class SQLConnect:
 
         cursor = self.connect.cursor()
 
-        sql = "insert into {0} (data_index,ts_code,ann_date," \
-              "end_date,eps,dt_eps," \
-              "total_revenue_ps,revenue_ps,capital_rese_ps," \
-              "surplus_rese_ps,undist_profit_ps,extra_item," \
-              "profit_dedt,gross_margin,current_ratio," \
-              "quick_ratio,cash_ratio,ar_turn," \
-              "ca_turn,fa_turn,assets_turn," \
-              "op_income,ebit,ebitda," \
+        sql = "insert into {0} (data_index,ts_code,ann_date, end_date, eps, dt_eps, total_revenue_ps, " \
+              "revenue_ps, capital_rese_ps, surplus_rese_ps, undist_profit_ps, extra_item, profit_dedt, gross_margin," \
+              "current_ratio, quick_ratio, cash_ratio, ar_turn, ca_turn, fa_turn, assets_turn, op_income, ebit, ebitda," \
               "fcff,fcfe,current_exint," \
               "noncurrent_exint,interestdebt,netdebt," \
               "tangible_asset,working_capital,networking_capital," \
@@ -1263,3 +1258,28 @@ class SQLConnect:
                     self.logger.error(ex)
             else:
                 return
+
+
+class insert_stock_financial_statements():
+    pass
+
+
+class insert_stock_debt_data():
+    pass
+
+
+class insert_stock_cashflow_data():
+    pass
+
+
+class insert_stock_dividend_data():
+    pass
+
+
+class insert_stock_express_data():
+    pass
+
+
+class insert_stock_fina_indicator():
+    pass
+
